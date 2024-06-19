@@ -35,7 +35,8 @@ impl TemplateGenerator {
     ) -> String {
         let mut context = "".to_string();
         if load_context {
-            context = get_context();
+            // context = get_context();
+            context = "you are a good assistant.".to_string();
         }
 
         match template_format {
@@ -144,36 +145,36 @@ Understood! I will always respond with concise messages and correct grammar. If 
     }
 }
 
-use std::fs;
-use std::io::Read;
+// use std::fs;
+// use std::io::Read;
 
-fn get_context() -> String {
-    let directory = "./context";
-    let mut file_contents: Vec<String> = Vec::new();
+// fn get_context() -> String {
+//     let directory = "./context";
+//     let mut file_contents: Vec<String> = Vec::new();
 
-    for entry in fs::read_dir(directory).expect("Read dir") {
-        let entry = entry.expect("File");
-        let path = entry.path();
+//     for entry in fs::read_dir(directory).expect("Read dir") {
+//         let entry = entry.expect("File");
+//         let path = entry.path();
 
-        println!("Reading:\n{:?}", path);
+//         println!("Reading:\n{:?}", path);
         
-        if path.is_file() {
-            if path.to_string_lossy().contains(".pdf") {
-                let bytes = std::fs::read(path).expect("pdf works");
-                let contents = pdf_extract::extract_text_from_mem(&bytes).expect("pdf works");
-                file_contents.push(remove_special(contents));
-            } else {
-                let mut file = fs::File::open(&path).expect("Open File");
-                let mut contents = String::new();
-                file.read_to_string(&mut contents).expect("File to string");
-                file_contents.push(remove_special(contents));
-            }
-        }
-    }
+//         if path.is_file() {
+//             if path.to_string_lossy().contains(".pdf") {
+//                 let bytes = std::fs::read(path).expect("pdf works");
+//                 let contents = pdf_extract::extract_text_from_mem(&bytes).expect("pdf works");
+//                 file_contents.push(remove_special(contents));
+//             } else {
+//                 let mut file = fs::File::open(&path).expect("Open File");
+//                 let mut contents = String::new();
+//                 file.read_to_string(&mut contents).expect("File to string");
+//                 file_contents.push(remove_special(contents));
+//             }
+//         }
+//     }
 
-    file_contents.join("/n/n")
-}
+//     file_contents.join("/n/n")
+// }
 
-fn remove_special(content: String) -> String {
-    content.replace(|c: char| !c.is_ascii_alphanumeric() && c != ' ' && c != '.' && c != ',' && c != '-' && c != '(' && c != ')' && c != '/' && c != '\n', "")
-}
+// fn remove_special(content: String) -> String {
+//     content.replace(|c: char| !c.is_ascii_alphanumeric() && c != ' ' && c != '.' && c != ',' && c != '-' && c != '(' && c != ')' && c != '/' && c != '\n', "")
+// }

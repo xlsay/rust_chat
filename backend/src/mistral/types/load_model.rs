@@ -1,6 +1,6 @@
 use candle_core::{DType, Device};
 use candle_nn::VarBuilder;
-use candle_transformers::models::mistral::{Config, Model as Mistral};
+use candle_transformers::models::mistral::{Config as MistralConfig, Model as Mistral};
 use candle_transformers::models::quantized_mistral::Model as QMistral;
 
 use anyhow::{Error as E, Result};
@@ -131,20 +131,22 @@ impl LoadModel {
         let model_config = args.model_config.as_deref();
         let config = match model_config {
             Some("ChatML") =>
-                Config::config_chat_ml(args.use_flash_attn),
+                MistralConfig::config_chat_ml(args.use_flash_attn),
             Some("Amazon") =>
-                Config::config_amazon_mistral_lite(args.use_flash_attn),
-            Some("SolarInstruct") | Some("Solar") =>
-                Config::config_upstage_solar(args.use_flash_attn),
+                MistralConfig::config_amazon_mistral_lite(args.use_flash_attn),
+            // Some("SolarInstruct") | Some("Solar") =>
+            //     MistralConfig::config_upstage_solar(args.use_flash_attn),
             _ =>
-                Config::config_7b_v0_1(args.use_flash_attn)
+                MistralConfig::config_7b_v0_1(args.use_flash_attn)
         };
 
         let (model, device) = if args.quantized {
+            let device = candle_examples::device(args.cpu)?;
             let filename = &filenames[0];
-            let vb = candle_transformers::quantized_var_builder::VarBuilder::from_gguf(filename)?;
+            let vb = candle_transformers::quantized_var_builder::VarBuilder::from_gguf(filename, &device)?;
             let model = QMistral::new(&config, vb)?;
-            (Model::Quantized(model), Device::Cpu)
+            // (Model::Quantized(model), Device::Cpu)
+            (Model::Quantized(model), device)
         } else {
             let device = candle_examples::device(args.cpu)?;
             println!("Device: {:?}", device);

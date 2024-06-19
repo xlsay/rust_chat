@@ -58,7 +58,7 @@ pub async fn start(
     let websocket_server_address = format!("{}:{}", ipv4, port).parse::<SocketAddr>().unwrap();
 
     // Serve
-    println!("listening on {}", websocket_server_address);
+    println!("candle listening on {}", websocket_server_address);
     axum::Server::bind(&websocket_server_address)
         .serve(app.into_make_service())
         .await

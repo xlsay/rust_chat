@@ -97,6 +97,7 @@ pub fn ChatBox() -> impl IntoView {
                     let:item
                 >
                     <div>{item.1.replace("\\n","  ").replace("\\\"","'").replace("\"","")}</div>
+                    <br />
                 </For>
             </div>
 

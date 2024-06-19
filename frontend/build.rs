@@ -8,7 +8,7 @@ pub fn main() {
     let generated_dir = root_dir.join("generated");
     let js_dir = generated_dir.join("js");
 
-    leptonic_theme::generate(generated_dir.join("leptonic"));
+    let _ = leptonic_theme::generate(generated_dir.join("leptonic"));
     println!("cargo:warning=theme written");
 
     std::fs::create_dir_all(js_dir.clone()).unwrap();

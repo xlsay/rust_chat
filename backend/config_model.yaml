@@ -1,15 +1,14 @@
 cpu: false
 use_flash_attn: false
-repo_id: "DanielClough/Candle_dolphin-2.2.1-mistral-7b"
+
+repo_id: 
 model_name: 
-model_config: "ChatML"
-# repo_id: "DanielClough/Candle_SOLAR-10.7B-Instruct-v1.0"
-# model_name: "Candle_SOLAR-10.7B-Instruct-v1.0_q2k.gguf"
-# model_config: SolarInstruct
-# repo_id: "DanielClough/Candle_MistralLite"
-# model_name: "Candle_MistralLite_q2k.gguf"
-# model_config: "Amazon"
+model_config:
+
 revision: "main"
-tokenizer_file:
-weight_files:
-quantized: false
+quantized: true
+# tokenizer_file:
+# weight_files:
+tokenizer_file: "../../candle_mistral/tokenizer.json"
+weight_files:  "../../candle_mistral/Candle_Mistral-7B-v0.1_q6k.gguf"
+# weight_files:  "../../candle_mistral/Candle_Mistral-7B-v0.1_q8k.gguf" # quantized type Q8K is not supported yet

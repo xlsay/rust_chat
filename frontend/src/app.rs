@@ -18,7 +18,7 @@ pub fn App() -> impl IntoView {
                 }/>
                 // Title
                 <H1 style="padding: 0; margin: .25rem .5rem;">
-                    Candle Chat
+                    Let 's Talk
                 </H1>
                 // Toggle Theme
                 <ThemeToggle off=LeptonicTheme::Light on=LeptonicTheme::Dark/>

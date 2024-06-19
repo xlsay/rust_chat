@@ -21,11 +21,13 @@ pub fn create_bot_msg(
     // Create prompt
     let prompt = TemplateGenerator::generate(&text_from_chat, history_split, &model_tokenizer_device.model_config, inference_args.load_context);
 
-    println!("\nPrompt:\n{}\n\n", prompt);
+    println!("\nPrompt: {}\n\n", prompt);
 
     // Produce response from Mistral
     let bot_response = mistral(prompt, &model_tokenizer_device, &inference_args)
         .unwrap_or("Bot is away at the moment, try again later.".to_string());
+
+    println!("\nBot_response: {}\n\n", bot_response);
 
     // Parse Bot Response with Regex
     let regex = Regex::new(r"(<\|im_end\|>|<\|/im_end\|>|\|im_end\||<\||assistant\n|\[INST\]|\[\/INST\]|\[inst\]|\[\/inst\]|<\/s>|<\/S>|\n\n### User:)")

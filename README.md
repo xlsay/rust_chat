@@ -1,112 +1,109 @@
-# Candle Chat
+# 纯RUST + LLM 构建一个web聊天机器人  
+(prev: candel_chat)  
+Forked from [vinicius-ianni/candle_chat](https://github.com/vinicius-ianni/candle_chat) forked from [danielclough/fireside-chat](https://github.com/danielclough/fireside-chat). 
 
-A multi-user chat bot implemented in pure Rust using [Mistral-7B](https://mistral.ai/news/announcing-mistral-7b/) with  [HuggingFace/Candle](https://github.com/huggingface/candle/) over [Axum](https://github.com/tokio-rs/axum) Websockets and a [Leptos](https://www.leptos.dev/) (Wasm) frontend!
+**视频介绍**   
+> [B站](https://www.bilibili.com/video/BV1oAgKehEom)  
+> [youtube原视频](https://www.youtube.com/watch?v=Jw1E3LnNG0o)  
 
-Watch the introduction video:
-[![Watch the video](https://img.youtube.com/vi/Jw1E3LnNG0o/0.jpg)](https://youtu.be/Jw1E3LnNG0o)
 
-> This project is a WIP.
-> The `main` branch should mostly work, but until I setup up automated testing I expect things to break without being caught.
-> Sorry about that. 🤗
+### 实现框架
+前端：[leptos](https://github.com/leptos-rs/leptos)  
+后端：[HuggingFace/Candle](https://github.com/huggingface/candle/)  
+前后端通信：[Axum](https://github.com/tokio-rs/axum)  
 
-## Goals
 
-My primary goal is to showcase the awesome power and simplicity of HuggingFace/Candle.
+### 主要配置文件
+backend/.env  
+```
+IPV4="127.0.0.1"
+PORT="3000"
+```
 
-## Setup / Operation
+backend/config_model.yaml
+模型文件已下载到本地，参考：
+```
+cpu: false
+use_flash_attn: false
 
-### Debian/Ubuntu
+# repo_id: "DanielClough/Candle_dolphin-2.2.1-mistral-7b"
+# model_name: 
+# model_config: "ChatML"
 
-```sh
-# install make and git
-sudo apt-get install git make
+repo_id: 
+model_name: 
+model_config:
 
-# clone with ssh
-git clone git@github.com:danielclough/candle_chat.git
-# or,
-# clone with https
-git clone https://github.com/danielclough/candle_chat.git
+revision: "main"
+quantized: true
+# tokenizer_file:
+# weight_files:
+tokenizer_file: "../../candle_mistral/tokenizer.json"
+weight_files:  "../../candle_mistral/Candle_Mistral-7B-v0.1_q4k.gguf" # 
 
-# 0) apt-get install
-# 1) install rust if not available
-# 2) install wasm target if not available
-# 3) install trunk if not available
-# 4) install cargo-watch if not available
-# 5) cp .env-example to .env if not available
-make init
+```
 
-# run release binaries
+网速好无需把模型文件下载到本地，参考：
+```
+cpu: false
+use_flash_attn: false
+repo_id: "DanielClough/Candle_dolphin-2.2.1-mistral-7b"
+model_name: 
+model_config: "ChatML"
+# repo_id: "DanielClough/Candle_SOLAR-10.7B-Instruct-v1.0"
+# model_name: "Candle_SOLAR-10.7B-Instruct-v1.0_q2k.gguf"
+# model_config: SolarInstruct
+# repo_id: "DanielClough/Candle_MistralLite"
+# model_name: "Candle_MistralLite_q2k.gguf"
+# model_config: "Amazon"
+revision: "main"
+tokenizer_file:
+weight_files:
+quantized: true
+```
+
+frontend/.env  
+```
+BACKEND_URL="127.0.0.1"
+BACKEND_PORT="3000"
+```
+
+frontend/Trunk.toml
+```
+address = "127.0.0.1"
+port = 8080
+```
+
+### 运行
+虽然可以直接按照原教程的:
+```
+make dev
+make prod
+```
+但是正常会出现依赖版本的不一致导致的报错，建议按如下步骤：
+ 
+```
+1. clone 项目
+git clone https://github.com/xlsay/rust_chat.git
+cd ../rust_chat
+git clone https://github.com/huggingface/candle.git
+
+2. 中国大陆开发者要先配置cargo国内源。
+
+3. cd rust_chat/backend
+3.1 修改上文提到的这个目录的配置文件 
+3.2 cargo build
+祝一切顺利。如果不顺利那就是 Cargo.toml 里依赖的版本不对，根据报错修改。
+
+
+4. cd rust_chat/frontend
+4.1 修改上文提到的这个目录的配置文件 
+4.2 cargo build
+祝一切顺利。如果不顺利那就是 Cargo.toml 里依赖的版本不对，根据报错修改。
+
+5. 以上步骤都成功后。
+cd rust_chat
 make prod
 
-# kill running processes
-make kill
+6. ENJOY!
 ```
-
-`make prod` runs both Frontend (Leptos) and Backend (Axum) in with the `--release` flag.
-
-View `make help` to see all commands.
-
-## Limitations
-
-In the future I may add a CLI tool for simplifying the setup experience.
-For now there will be two binaries in two project folders, one for the Frontend and one for the Backend.
-This layout is a consequence of Trunk not working well with workspaces ([Trunk Issue](https://github.com/thedodd/trunk/issues/575#issuecomment-1693471972)).
-
-## Backend (Axum)
-
-You can use yaml files to configure model and inference parameters, or use the defaults.
-
-### Server Config
-
-Backend defaults to `127.0.0.1:3000`.
-
-You can alter this by copying `/backend/.env-example` to `/backend/.env` and setting your desired config there.
-
-### Inference Config
-
-Default inference options can be configured with `/backend/config_inference.yaml`
-
-### Model Config
-
-Default model options can be configured with `/backend/config_model.yaml`.
-
-See [README-MODEL.md](https://github.com/danielclough/candle_chat/blob/main/README-MODEL.md).
-
-### Cuda
-
-Running with `Cuda`` is the default configuration.
-
- - `/backend/config_model.yaml` must include `cpu: false`.
-
-And, enable the cuda feature flags must be enabled:
-
-```sh
-cargo add candle-core -F "cuda"
-cargo add candle-transformers -F "cuda"
-```
-
-## Frontend (Leptos)
-
-Each user has their own chat history.
-
-You can use the sidebar to adjust inference parameters.
-
-The Frontend is static for simple deployment on platforms such as Github Pages, or on a server with Trunk.
-
-## Trunk
-
-This project serves static files with [Trunk](https://trunkrs.dev/).
-
-Here is a link to the [Trunk config on Github](https://github.com/thedodd/trunk/blob/master/Trunk.toml).
-
-### `.env` Config
-
-Frontend server defaults to `127.0.0.1:8080`
-
-You can alter this by copying `/frontend/.env-example` to `/frontend/.env` and setting your desired config there.
-
-Since the frontend and backend are designed to run separately you must keep the backend Port and IPV4 in sync!
-
-
-## Development
-
