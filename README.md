@@ -39,7 +39,7 @@ quantized: true
 # tokenizer_file:
 # weight_files:
 tokenizer_file: "../../candle_mistral/tokenizer.json"
-weight_files:  "../../candle_mistral/Candle_Mistral-7B-v0.1_q4k.gguf" # 
+weight_files:  "../../candle_mistral/Candle_Mistral-7B-v0.1_q4k.gguf" # not support _q8k 
 
 ```
 
