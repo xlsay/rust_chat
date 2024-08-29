@@ -107,3 +107,28 @@ make prod
 
 6. ENJOY!
 ```
+
+### For rust Newbies
+- [Rust 程序设计语言](https://rustwiki.org/zh-CN/book/ch01-01-installation.html)
+    ```shell
+    Hello rust.
+    1. 安装：
+        curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh  
+        安装完成后测试： rustc --version  
+    2. 代码 main.rs
+        fn main() {
+            println!("Hello, world!");
+        }
+    3. 编译&运行
+        rustc main.rs
+        ./main
+
+    ```
+- Cargo [管理项目管理包的工具]
+    - see more `Cargo.toml` keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+    ```
+        - 可以使用 cargo build 构建项目。
+        - 可以使用 cargo run 一步构建并运行项目。
+        - 可以使用 cargo check 构建项目而无需生成二进制文件来检查错误。(比build速度快)
+        - Cargo 会将构建结果保存到 target/debug 目录，而不是源码所在的目录。
+    ```
