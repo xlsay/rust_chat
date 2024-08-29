@@ -21,7 +21,7 @@ PORT="3000"
 ```
 
 backend/config_model.yaml
-模型文件已下载到本地，参考：
+模型文件已下载到本地后，参考：
 ```
 cpu: false
 use_flash_attn: false
@@ -88,7 +88,7 @@ git clone https://github.com/xlsay/rust_chat.git
 cd ../rust_chat
 git clone https://github.com/huggingface/candle.git
 
-2. 中国大陆开发者要先配置cargo国内源。
+2. 中国大陆开发者要先配置cargo国内源(ref: https://blog.csdn.net/qq_28550263/article/details/130758057)。
 
 3. cd rust_chat/backend
 3.1 修改上文提到的这个目录的配置文件 
